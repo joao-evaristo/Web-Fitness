@@ -20,7 +20,22 @@
             <section id="visualizarMacros">
                 
             </section>
-        </main>       
+            <section id="refeicoes">
+                <div id="cafe">
+                    <h2>Café da manhã</h2>
+                    <button id="adcAlimentos" onclick="adcAlimentos(this)">Adicionar Alimentos</button>
+                </div>
+            </section>
+        </main>   
+        <div id="modalAdcAlimentos">
+            <div class="modal">
+                <button id="fechar">X</button>
+                <h2>Buscar Alimento</h2>
+                <input id="buscarAlimentos" placeholder="Banana">
+                <div id="alimentos"></div>
+            </div>
+        </div>    
     </body>
     <script src="./assets/javascript/geraDieta.js"></script>
+    <script src="./assets/javascript/index.js"></script>
 </html>
