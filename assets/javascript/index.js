@@ -30,26 +30,37 @@ function DadosFiltrados(inputValue){
 
 //Exibe a comida com suas informações nutricionais
 function exibirDados(foods){
-    $("#teste").empty();
+    $("#alimentos").empty();
 
     for(i=0;i<foods.length;i++){
         var desc = foods[i].description
         var unid = foods[i].base_unit
         
-        var qntd = `${parseInt(foods[i].base_qty).toFixed(2)}${unid}`   
-        var cal = `${parseInt(foods[i].attributes.energy.kcal).toFixed(2)}kcal`   
-        var carbo = `${parseInt(foods[i].attributes.carbohydrate.qty).toFixed(2)}${unid}` 
-        var prot= `${parseInt(foods[i].attributes.protein.qty).toFixed(2)}${unid}`
-        var fat = `${parseInt(foods[i].attributes.lipid.qty).toFixed(2)}${unid}`
+        var qntd = `${parseInt(foods[i].base_qty).toFixed(2)}`   
+        var cal = `${parseInt(foods[i].attributes.energy.kcal).toFixed(2)}`   
+        var carbo = `${parseInt(foods[i].attributes.carbohydrate.qty).toFixed(2)}` 
+        var prot= `${parseInt(foods[i].attributes.protein.qty).toFixed(2)}`
+        var fat = `${parseInt(foods[i].attributes.lipid.qty).toFixed(2)}`
 
-        $("#teste").append( 
-            `<div>
-                <h1>${desc}</h1>
-                <p>Quantidade ${qntd}</p>
-                <p>Calorias ${cal}</p>
-                <p>Carboidratos ${carbo}</p>
-                <p>Proteína ${prot}</p>
-                <p>Gordura ${fat}</p>
+        $("#alimentos").append( 
+            `<div id="alimento___${i}" class="alimento" onclick="armazenaAlimento(this)">
+                <div id="info1">
+                    <h1>${desc}</h1>
+                    <input type="hidden" id="hiddenNome" value="${desc}">
+                    <p>${cal}Kcal</p>
+                    <input type="hidden" id="hiddenCal" value="${cal}">
+                </div>
+                <div id="info2">                  
+                    <p>Quantidade ${qntd}${unid}</p>
+                    <div class="macros">
+                        <p>Carboidratos ${carbo}${unid}</p>
+                        <input type="hidden" id="hiddenCarbo" value="${carbo}">
+                        <p>Proteína ${prot}${unid}</p>
+                        <input type="hidden" id="hiddenProt" value="${prot}">
+                        <p>Gordura ${fat}${unid}</p>
+                        <input type="hidden" id="hiddenGord" value="${fat}">
+                    </div>
+                </div>           
             </div>`
         );
     }

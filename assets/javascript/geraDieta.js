@@ -92,3 +92,50 @@ function exibeDados(kcal,objetivo,peso){
         </div>`       
     )
 }
+
+function adcAlimentos(){
+    $("#modalAdcAlimentos").addClass( "mostrar" )
+}
+
+//Adicionar refeiçao dinamica
+function armazenaAlimento(element){
+    that = element;
+    var alimentos = []
+    if (localStorage.hasOwnProperty("refeicao")) {
+        alimentos = JSON.parse(localStorage.getItem("refeicao"))
+    }
+    /* const ordemMacros = {
+        "Alimento":0,
+        "Kcal":1,
+        "Carbo":2,
+        "Prot":3,
+        "Gord":4
+    } */
+    var macros = $(`#${that.id} input`)
+    var alimento
+
+    for(i=0;i<macros.length;i++){
+        var macro = macros[i].value
+        if(i==1){
+            alimento = {...alimento,"Nome":macro} 
+        } else if(i==2){
+            alimento = {...alimento,"Kcal":macro} 
+        } else if(i==3){
+            alimento = {...alimento,"Carbo":macro} 
+        } else if(i==4){
+            alimento = {...alimento,"Prot":macro} 
+        } else if(i==5){
+            alimento = {...alimento,"Gord":macro} 
+        }
+              
+    }
+    alimentos.push(alimento)
+
+    localStorage.setItem("refeicao", JSON.stringify(alimentos))
+}
+
+$( "#modalAdcAlimentos" ).click(function(e) {
+    if(e.target.id == "modalAdcAlimentos" || e.target.id == "fechar"){
+        $("#modalAdcAlimentos").removeClass( "mostrar"  )
+    }
+});
