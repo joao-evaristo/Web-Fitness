@@ -1,0 +1,27 @@
+.totalMacro{
+    position: relative;
+    background-color: #867D7D;
+    height:15px;
+    width:200px;
+    border-radius:10px
+}
+
+.qntdMacro{
+    position:absolute;
+    background-color: #9f2525;
+    height:15px;
+    width:150px;
+    border-radius:10px
+}
+
+#qntdCarbo{
+    background-color: #1A9B27
+}
+
+#qntdProteina{
+    background-color: #9B1A1A
+}
+
+#qntdGordura{
+    background-color: #C9CC1F
+}
