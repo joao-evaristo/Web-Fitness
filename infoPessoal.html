@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web Fitness</title>
+        <link rel="stylesheet" type="text/css" href="./assets/css/index.css" media="screen" />        
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <header>
+            <a href="./index.html"><img src="./assets/img/logo.svg"></a>
+            <nav>
+                <a href="">Criar dieta</a>
+            </nav>
+        </header>
+        <main id="conteudoInicial">
+            <section id="infoPessoal">
+                <h1>Preencha os dados para calcularmos sua dieta</h1>
+                <p>Gênero</p>
+                <select id="genero" name="genero">
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                </select>
+                <p>Peso (kg)</p>
+                <input id="peso" placeholder="80">
+                <p>Altura (cm)</p>
+                <input id="altura" placeholder="185">
+                <p>Idade</p>
+                <input id="idade" placeholder="35">
+                <p>Nível de Atividade</p>
+                <select name="nivelAtividade" id="nivelAtividade">
+                    <option value="sedentario">Sedentário</option>
+                    <option value="levementeAtivo">Levemente Ativo</option>
+                    <option value="ativoIniciante">Ativo (Iniciante)</option>
+                    <option value="ativoIntermediario">Ativo (Intermedíario)</option>
+                    <option value="ativoAvancado">Ativo (Avançado)</option>
+                </select>
+                <p>Objetivo</p>
+                <select name="objetivo" id="objetivo">
+                    <option value="perderPeso">Perder Peso</option>
+                    <option value="ganharPeso">Ganhar Peso</option>                 
+                    <option value="manterPeso">Manter Peso</option>
+                    <option value="recuperacaoMuscular">Recuperação Muscular</option>
+                </select>
+                <button id="criarDieta" onclick="armazenaInformacoes()">Criar Dieta</button>
+            </section>
+        </main>
+    </body>
+    <script src="./assets/javascript/armazenaDieta.js"></script>
+</html>
