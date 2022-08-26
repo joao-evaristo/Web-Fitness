@@ -3,13 +3,13 @@ $( document ).ready(function() {
     geraMacros(infoPessoal)
 });
 
+var metaKcal = 0
+var metaProteina= 0
+var metaGordura= 0
+var metaCarbo= 0
+
 function geraMacros({genero,peso,altura,idade,nivelAtividade,objetivo}){
-    /* var genero = genero
-    var peso = infoPessoal[1] */
     const alturaInt = Math.pow(parseInt(altura))
-    /* const idade = infoPessoal[3]
-    const nivelAtividade = infoPessoal[4]
-    const objetivo = infoPessoal[5] */
     var calculoCalorico
     
     var pesoIdealMasc = (alturaInt * 21.5).toFixed(2)
@@ -24,12 +24,6 @@ function geraMacros({genero,peso,altura,idade,nivelAtividade,objetivo}){
     }
 
     //Verifica se o usuário está no peso ideal de acordo com o cálculo
-    /* if(genero == "masculino" && (peso > pesoIdealMasc+10) || (peso < pesoIdealMasc-10)){
-        peso = pesoIdealMasc
-    } else if(genero == "feminino" && (peso > pesoIdealFem+10) || (peso < pesoIdealFem-10)){
-        peso = pesoIdealFem
-    } */
-    
     if(genero == "masculino"){
         if((peso > pesoIdealMasc+10) || (peso < pesoIdealMasc-10)){
             peso = pesoIdealMasc
@@ -43,6 +37,31 @@ function geraMacros({genero,peso,altura,idade,nivelAtividade,objetivo}){
     }   
 
     exibeDados(calculoCalorico,objetivo,peso)
+}
+
+function calculaMacrosTotais(metaKcal,metaProteina,metaGordura,metaCarbo){
+    var prot = 0
+    var carbo = 0
+    var gord = 0
+    var kcal = 0
+
+    var cafeManha = JSON.parse(localStorage.getItem(`CafeManha`))
+
+    for(i=0;i<cafeManha.length;i++){
+        var macro = cafeManha[i]
+
+        prot += parseFloat(macro.Prot)
+        carbo += parseFloat(macro.Carbo)
+        gord += parseFloat(macro.Gord)
+        kcal += parseFloat(macro.Kcal)
+    }
+
+    var porcentagemProt = (prot*100)/metaProteina
+    var porcentagemCarbo = (carbo*100)/metaCarbo
+    var porcentagemGord = (gord*100)/metaGordura
+    var porcentagemKcal = (kcal*100)/metaKcal
+
+    return {porcentagemProt,porcentagemCarbo,porcentagemGord,porcentagemKcal,prot,carbo,gord,kcal}
 }
 
 function exibeDados(kcal,objetivo,peso){
@@ -60,10 +79,12 @@ function exibeDados(kcal,objetivo,peso){
         "recuperacaoMuscular":3.5
     }
 
-    var metaKcal = parseInt(`${kcal + objetivoKcal[objetivo]}`)
-    var metaProteina = parseInt(peso) * 2
-    var metaGordura = peso
-    var metaCarbo = peso * objetivoCarbo[objetivo]
+    metaKcal = parseInt(`${kcal + objetivoKcal[objetivo]}`)
+    metaProteina = parseInt(peso) * 2
+    metaGordura = peso
+    metaCarbo = peso * objetivoCarbo[objetivo]
+
+    var macros = calculaMacrosTotais(metaKcal,metaProteina,metaGordura,metaCarbo)
 
     $("#visualizarMacros").append(
         `<h1>Minhas Metas</h1>
@@ -73,65 +94,80 @@ function exibeDados(kcal,objetivo,peso){
         <div id="metaMacros">
             <div id="divCarbo">
                 <p>Carboidratos</p>
-                <p id="qntCarbo"></p>
-                <p id="metaCarbo">${metaCarbo}</p>
+                <div class="qntdMeta">
+                    <p id="qntCarbo">(${macros.carbo}g/</p>
+                    <p id="metaCarbo"> ${metaCarbo}g)</p>
+                </div>              
                 <div class="totalMacro"><div id="qntdCarbo" class="qntdMacro"></div></div>
             </div>
             <div id="divProteina">
                 <p>Proteina</p>
-                <p id="qntProteina"></p>
-                <p id="metaProteina">${metaProteina}</p>
+                <div class="qntdMeta">
+                    <p id="qntProteina">(${macros.prot}g/</p>
+                    <p id="metaProteina">${metaProteina}g)</p>
+                </div>
                 <div class="totalMacro"><div id="qntdProteina" class="qntdMacro"></div></div>
             </div>
             <div id="divGordura">
                 <p>Gordura</p>
-                <p id="qntGordura"></p>
-                <p id="metaGordura">${metaGordura}</p>
+                <div class="qntdMeta">
+                    <p id="qntGordura">(${macros.gord}g/</p>
+                    <p id="metaGordura">${metaGordura}g)</p>
+                </div>           
                 <div class="totalMacro"><div id="qntdGordura" class="qntdMacro"></div></div>
             </div>
         </div>`       
     )
+
+
+    $("#qntdProteina").css("width", `${macros.porcentagemProt}%`);
+    $("#qntdCarbo").css("width", `${macros.porcentagemCarbo}%`);
+    $("#qntdGordura").css("width", `${macros.porcentagemGord}%`);
+    /* $("#qntdCarbo").width(porcentagemMaacros.porcentagemProt) */
 }
 
 function adcAlimentos(){
     $("#modalAdcAlimentos").addClass( "mostrar" )
 }
 
+//Evento para pegar o nome da refeicao
+var refeicao = ""
+$( ".adcAlimentos" ).click(function() {
+    refeicao = (this.id).substring(3)
+});
+
 //Adicionar refeiçao dinamica
 function armazenaAlimento(element){
     that = element;
     var alimentos = []
-    if (localStorage.hasOwnProperty("refeicao")) {
-        alimentos = JSON.parse(localStorage.getItem("refeicao"))
+    if (localStorage.hasOwnProperty(`${refeicao}`)) {
+        alimentos = JSON.parse(localStorage.getItem(`${refeicao}`))
     }
-    /* const ordemMacros = {
-        "Alimento":0,
-        "Kcal":1,
-        "Carbo":2,
-        "Prot":3,
-        "Gord":4
-    } */
+
     var macros = $(`#${that.id} input`)
     var alimento
 
+    //Loop para criar um objeto e adicionar os macros corretamente
     for(i=0;i<macros.length;i++){
         var macro = macros[i].value
-        if(i==1){
+        if(i==0){
             alimento = {...alimento,"Nome":macro} 
-        } else if(i==2){
+        } else if(i==1){
             alimento = {...alimento,"Kcal":macro} 
-        } else if(i==3){
+        } else if(i==2){
             alimento = {...alimento,"Carbo":macro} 
-        } else if(i==4){
+        } else if(i==3){
             alimento = {...alimento,"Prot":macro} 
-        } else if(i==5){
+        } else if(i==4){
             alimento = {...alimento,"Gord":macro} 
         }
               
     }
     alimentos.push(alimento)
 
-    localStorage.setItem("refeicao", JSON.stringify(alimentos))
+    localStorage.setItem(`${refeicao}`, JSON.stringify(alimentos))
+
+    atualizaMacros()
 }
 
 $( "#modalAdcAlimentos" ).click(function(e) {
@@ -139,3 +175,12 @@ $( "#modalAdcAlimentos" ).click(function(e) {
         $("#modalAdcAlimentos").removeClass( "mostrar"  )
     }
 });
+
+//Função para atualizar os macros a cada vez que um alimento for adicionado
+function atualizaMacros(){
+    var porcentagemMacros = calculaMacrosTotais(metaKcal,metaProteina,metaGordura,metaCarbo)
+
+    $("#qntdProteina").css("width", `${porcentagemMacros.porcentagemProt}%`);
+    $("#qntdCarbo").css("width", `${porcentagemMacros.porcentagemCarbo}%`);
+    $("#qntdGordura").css("width", `${porcentagemMacros.porcentagemGord}%`);
+}
